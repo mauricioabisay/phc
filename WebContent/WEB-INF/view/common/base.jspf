@@ -1,0 +1,117 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mauricio Abisay Lopez Velazquez" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+
+    <title>PHC - Programa de Historia Clínica</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<c:url value = '/resources/css/bootstrap.min.css' />" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="<c:url value = '/resources/css/bootstrap-theme.min.css' />" rel="stylesheet">
+	  <!--  <link href="<c:url value = '/assets/css/bootstrap-responsive.css' />" rel="stylesheet"> -->
+	  <script src="<c:url value = '/resources/js/jquery-2.1.1.min.js' />"></script>
+    <script src="<c:url value = '/resources/js/bootstrap.min.js' />"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="<c:url value='/resources/js/prepareLinks.js' />"></script>
+  </head>
+  <body role="document" class="col-lg-12">
+  	<c:set var="isPaciente" value="${sessionScope.pacienteSummary != null}" />
+  
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <c:if test="${isPaciente}">
+              	<a class="navbar-brand" href="${pageContext.request.contextPath}/logout_paciente">PHC</a>
+              </c:if>
+              <c:if test="${!isPaciente}">
+              	<a class="navbar-brand" href="${pageContext.request.contextPath}/welcome">PHC</a>
+              </c:if>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+				
+				<li class="<c:if test='${usuario.current=="paciente"}'>active</c:if>">
+					<c:if test="${!isPaciente}">
+						<a href="${pageContext.request.contextPath}/paciente/create">F.Identidad</a>
+					</c:if>
+					<c:if test="${isPaciente}">
+						<a href="${pageContext.request.contextPath}/paciente/retrieve/${pacienteSummary.id}">F.Identidad</a>
+					</c:if>
+				</li>
+                
+                <li class="dropdown <c:if test='${!isPaciente}'>disabled</c:if>">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Antecedentes <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li class="divider"></li>
+                    <li class="<c:if test='${usuario.current=="antecedenteFamiliar"}'>active</c:if>"><a href="${pageContext.request.contextPath}/antecedentefamiliar/${pacienteSummary.id}">Ant.Heredofamiliares</a></li>
+                    <li class="<c:if test='${usuario.current=="padecimiento"}'>active</c:if>"><a href="${pageContext.request.contextPath}/padecimiento/${pacienteSummary.id}">Ant.Patológicos</a></li>
+                    <li class="<c:if test='${usuario.current=="antecedentePersonal"}'>active</c:if>"><a href="${pageContext.request.contextPath}/antecedentepersonal/${pacienteSummary.id}">Ant.No Patológicos</a></li>
+                  </ul>
+                </li>
+                <li <c:if test="${!isPaciente}">class="disabled"</c:if><c:if test='${usuario.current=="interrogatorio"}'>class="active"</c:if>>
+                	<a href="${pageContext.request.contextPath}/interrogatorio/${pacienteSummary.id}">Interrogatorio</a></li>
+                
+                <li <c:if test="${!isPaciente}">class="disabled"</c:if><c:if test='${usuario.current=="exploracionFisica"}'>class="active"</c:if>>
+                	<a href="${pageContext.request.contextPath}/exploracionfisica/${pacienteSummary.id}">Exploración Física</a></li>
+                
+                <li <c:if test="${!isPaciente}">class="disabled"</c:if><c:if test='${usuario.current=="laboratorio"}'>class="active"</c:if>>
+                	<a href="${pageContext.request.contextPath}/laboratorio/${pacienteSummary.id}">Labs. y Gab.</a></li>
+                
+                <li <c:if test="${!isPaciente}">class="disabled"</c:if>>
+                	<a href="#">H.Padecimientos</a></li>
+                
+                <li <c:if test="${!isPaciente}">class="disabled"</c:if>>
+                	<a href="#">H.Medicamentos</a></li>
+              </ul>
+              
+              <form class="navbar-form navbar-left" role="search" method="post" action="${pageContext.request.contextPath}/welcome">
+                <div class="form-group">
+                  <input name="nombre" type="text" class="form-control" placeholder="Paciente..." />
+                </div>
+                <button type="submit" class="btn btn-default">Buscar</button>
+              </form>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+    </nav>
+    <br/>
+    <c:if test="${sessionScope.pacienteSummary != null}">
+    	<div class="panel panel-info page-header">
+    		<div class="panel-heading">
+    		<h4 class="panel-title">
+    			${pacienteSummary.id}&nbsp;
+    			${pacienteSummary.nombre}&nbsp;${pacienteSummary.apellidoPaterno}&nbsp;${pacienteSummary.apellidoMaterno}
+    		</h4>
+    		</div>
+    		<table class="table">
+    			<tr>
+    				<td>${pacienteSummary.sexo}</td>
+    				<td>${pacienteSummary.edad}</td>
+    			</tr>
+    		</table>
+    	</div>
+    </c:if>
+    

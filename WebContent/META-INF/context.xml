@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<Resource 
+		name="jdbc/homeopata" 
+		type="javax.sql.DataSource" 
+		auth="Container"
+    	driverClassName="com.mysql.jdbc.Driver"
+		maxActive="20" maxIdle="5" maxWait="10000"
+		username="root" password="123456"
+		url="jdbc:mysql://localhost/phc?useUnicode=true&amp;characterEncoding=UTF-8" />
+
+</Context>
